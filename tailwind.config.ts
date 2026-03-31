@@ -12,6 +12,15 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      animation: {
+        "star-btn": "star-btn calc(var(--duration)*1s) linear infinite",
+      },
+      keyframes: {
+        "star-btn": {
+          "0%": { "offset-distance": "0%" },
+          "100%": { "offset-distance": "100%" },
+        },
+      },
     },
   },
   plugins: [],

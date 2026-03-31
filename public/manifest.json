@@ -1,0 +1,18 @@
+{
+  "name": "MOTUS — Movement is Sound",
+  "short_name": "MOTUS",
+  "description": "Real-time movement-to-music instrument by ARTLUKA",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F5F5F5",
+  "theme_color": "#0A0A0A",
+  "icons": [
+    {
+      "src": "/artluka-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
