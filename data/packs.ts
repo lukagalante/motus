@@ -285,8 +285,8 @@ export const PACKS: SoundPackConfig[] = [
       { name: 'Tears Pad', type: 'am', note: 'Cm3', duration: '1n', options: { harmonicity: 1.003, envelope: { attack: 1.2, decay: 1.5, sustain: 0.8, release: 2.5 } } },
       // Stranger Things main theme — pulsing Juno arp, repetitive, hypnotic
       { name: 'ST Pulse', type: 'synth', note: 'C4', duration: '16n', options: { oscillator: { type: 'sawtooth' }, envelope: { attack: 0.001, decay: 0.08, sustain: 0, release: 0.04 } } },
-      // Yamaha CS-80 brass — the Vangelis signature, rich poly brass stab
-      { name: 'CS-80 Brass', type: 'fm', note: 'G3', duration: '2n', options: { harmonicity: 1.5, modulationIndex: 2.5, envelope: { attack: 0.06, decay: 0.8, sustain: 0.5, release: 1 } } },
+      // CS-80 Main Title — Blade Runner opening swell, slow cry, Bb3
+      { name: 'CS-80 Swell', type: 'fm', note: 'Bb3', duration: '1n', options: { harmonicity: 1.5, modulationIndex: 3, envelope: { attack: 0.5, decay: 1, sustain: 0.7, release: 1.5 } } },
       // Korg Polysix — the 80's analog poly, warm detuned, chorus pad
       { name: 'Polysix', type: 'am', note: 'E4', duration: '1n', options: { harmonicity: 1.004, envelope: { attack: 0.4, decay: 0.8, sustain: 0.7, release: 1.5 } } },
       // Korg M1 Piano — the most iconic digital piano of the 80's, glassy, emotional

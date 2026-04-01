@@ -375,19 +375,21 @@ export class ExpressionEngine {
           harmonicity: 6, modulationIndex: 2,
           envelope: { attack: 0.01, decay: 0.6, sustain: 0.1, release: 0.8 },
         }, filterBase: 700 },
-        // RARM: CS-80 BRASS — Vangelis signature, rich poly brass
-        // The right arm plays the heroic Blade Runner brass melody
-        // High harmonicity for brass timbre, slow attack for emotional swell
-        { id: 'rarm', type: 'fm', midiNote: 67, options: { // G4
-          harmonicity: 1.5, modulationIndex: 2.5,
-          envelope: { attack: 0.05, decay: 0.8, sustain: 0.5, release: 1 },
-        }, filterBase: 400 },
-        // LARM: TEARS IN RAIN PAD — the Vangelis emotional pad
-        // Slow attack, deep sustain, the melancholy beauty of Blade Runner
-        // AM with near-unison harmonicity = detuned chorus character
-        { id: 'larm', type: 'am', midiNote: 48, options: { // C3
-          harmonicity: 1.003,
-          envelope: { attack: 1, decay: 1.2, sustain: 0.8, release: 2 },
+        // RARM: BLADE RUNNER MAIN TITLE — the CS-80 swell
+        // Slow attack that builds, filter opens with intensity,
+        // vibrato comes in after the swell. The sound that CRIES.
+        // Bb3 = the key of the main title melody
+        { id: 'rarm', type: 'fm', midiNote: 58, options: { // Bb3
+          harmonicity: 1.5, modulationIndex: 3,
+          envelope: { attack: 0.6, decay: 1.2, sustain: 0.7, release: 1.5 },
+        }, filterBase: 300 },
+        // LARM: BLADE RUNNER MAIN TITLE — harmonic complement
+        // The left arm plays the lower pad underneath the melody
+        // Together both arms recreate the full CS-80 layered sound
+        // Eb3 = minor third below, dark emotional foundation
+        { id: 'larm', type: 'fm', midiNote: 51, options: { // Eb3
+          harmonicity: 1.5, modulationIndex: 2,
+          envelope: { attack: 0.8, decay: 1.5, sustain: 0.7, release: 2 },
         }, filterBase: 250 },
         // TORSO: Korg Mono/Poly bass — fat analog, pulsing
         { id: 'torso', type: 'mono', midiNote: 36, options: { // C2
