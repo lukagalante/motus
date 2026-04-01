@@ -4,10 +4,15 @@ export interface Point {
   visibility?: number;
 }
 
-export function velocity(prev: Point, curr: Point): number {
+export function velocity(prev: Point, curr: Point, bodyScale?: number): number {
   const dx = curr.x - prev.x;
   const dy = curr.y - prev.y;
-  return Math.sqrt(dx * dx + dy * dy);
+  const raw = Math.sqrt(dx * dx + dy * dy);
+  // Normalize by body size on screen — prevents close-ups from being louder
+  if (bodyScale && bodyScale > 0.01) {
+    return raw / bodyScale;
+  }
+  return raw;
 }
 
 export function velocityY(prev: Point, curr: Point): number {

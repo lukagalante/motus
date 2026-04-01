@@ -578,19 +578,20 @@ export class ExpressionEngine {
     // Foundation — lean shifts pitch, expansion opens sound
     // ±5 semitones with lean, wider filter with expansion
     this.updateVoice('torso', state.torsoFlow, {
-      pitchBend: state.lean * 5,
+      pitchBend: state.lean * 5 + state.symmetry * 2,
       filterFreq: 150 + state.bodyExpansion * 5000 + state.torsoFlow * 3000,
-      modBoost: state.torsoFlow * 4,
+      modBoost: state.torsoFlow * 4 + state.symmetry * 2,
     }, now);
 
     // ─── LEGS VOICE ────────────────────────────────
-    // Grounding bass — jumping = pitch up, footwork = filter open
-    // +8 semitones with vertical energy
-    const legFlow = Math.max(state.rightLegFlow, state.leftLegFlow);
+    // Average both legs + asymmetry for footwork variation
+    // Asymmetric kicks (one leg) create filter/pitch modulation
+    const legFlow = (state.rightLegFlow + state.leftLegFlow) / 2;
+    const legAsymmetry = Math.abs(state.rightLegFlow - state.leftLegFlow);
     this.updateVoice('legs', legFlow, {
-      pitchBend: Math.max(0, state.verticalEnergy) * 8,
-      filterFreq: 100 + legFlow * 4000,
-      modBoost: Math.max(0, state.verticalEnergy) * 6,
+      pitchBend: Math.max(0, state.verticalEnergy) * 8 + legAsymmetry * 3,
+      filterFreq: 100 + legFlow * 4000 + legAsymmetry * 2000,
+      modBoost: Math.max(0, state.verticalEnergy) * 6 + legAsymmetry * 4,
     }, now);
   }
 
@@ -603,16 +604,14 @@ export class ExpressionEngine {
     const voice = this.voices.get(id);
     if (!voice) return;
 
-    // Very low threshold — even subtle breathing-like movement activates
-    const THRESHOLD = 0.015;
+    // Threshold — catch micro-movements but filter jitter
+    const THRESHOLD = 0.008;
 
     if (flow < THRESHOLD) {
-      // Quick fade out — responsive silence
       if (voice.active) {
-        const smoothed = this.lerp(this.smoothGains.get(id) || 0, 0, 0.25);
+        const smoothed = this.lerp(this.smoothGains.get(id) || 0, 0, 0.3);
         this.smoothGains.set(id, smoothed);
-        voice.gain.gain.rampTo(smoothed, 0.06);
-
+        voice.gain.gain.rampTo(smoothed, 0.04);
         if (smoothed < 0.003) {
           try { voice.synth.triggerRelease(now); } catch {}
           voice.active = false;
@@ -622,37 +621,34 @@ export class ExpressionEngine {
       return;
     }
 
-    // Activate if not active
     if (!voice.active) {
       const noteFreq = Tone.Frequency(voice.baseNote, 'midi').toFrequency();
-      try {
-        voice.synth.triggerAttack(noteFreq, now);
-      } catch {}
+      try { voice.synth.triggerAttack(noteFreq, now); } catch {}
       voice.active = true;
     }
 
-    // Volume — sqrt curve so small movements are clearly audible
+    // Volume — sqrt curve, fast tracking
     const targetGain = Math.min(0.8, Math.sqrt(flow) * 0.85);
-    const smoothed = this.lerp(this.smoothGains.get(id) || 0, targetGain, 0.35);
+    const smoothed = this.lerp(this.smoothGains.get(id) || 0, targetGain, 0.55);
     this.smoothGains.set(id, smoothed);
-    voice.gain.gain.rampTo(smoothed, 0.03); // fast ramp = responsive
+    voice.gain.gain.rampTo(smoothed, 0.015);
 
-    // Pitch bend — wider range, faster response
+    // Pitch — fast tracking for expressive bends
     const targetNote = voice.baseNote + params.pitchBend;
     if (Math.abs(targetNote - voice.currentNote) > 0.05) {
       const freq = Tone.Frequency(Math.max(20, targetNote), 'midi').toFrequency();
-      voice.synth.frequency.rampTo(freq, 0.05); // faster pitch follow
+      voice.synth.frequency.rampTo(freq, 0.025);
       voice.currentNote = targetNote;
     }
 
-    // Filter — fast response, wide range
-    voice.filter.frequency.rampTo(params.filterFreq, 0.04);
+    // Filter — sharp timbral response
+    voice.filter.frequency.rampTo(params.filterFreq, 0.02);
 
-    // Modulation boost — adds harmonic richness with intensity
+    // Modulation — harmonic richness follows intensity
     if (voice.synth instanceof Tone.FMSynth) {
       const baseMod = (voice.synth as Tone.FMSynth).modulationIndex.value;
       (voice.synth as Tone.FMSynth).modulationIndex.rampTo(
-        baseMod + params.modBoost, 0.06
+        baseMod + params.modBoost, 0.04
       );
     }
   }

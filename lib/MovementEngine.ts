@@ -171,13 +171,22 @@ export class MovementEngine {
 
     const prev = this.prevLandmarks;
 
-    // ─── VELOCITY per keypoint ────────────────────────
+    // ─── BODY SCALE NORMALIZATION ─────────────────────
+    // Calculate body size on screen so close-up and full-body
+    // produce the SAME intensity for the SAME real movement.
+    const scaleShoulderY = (landmarks[KEYPOINTS.LEFT_SHOULDER].y + landmarks[KEYPOINTS.RIGHT_SHOULDER].y) / 2;
+    const scaleHipY = (landmarks[KEYPOINTS.LEFT_HIP].y + landmarks[KEYPOINTS.RIGHT_HIP].y) / 2;
+    const bodyHeight = Math.max(0.1, scaleHipY - scaleShoulderY);
+    const scaleShoulderW = Math.abs(landmarks[KEYPOINTS.RIGHT_SHOULDER].x - landmarks[KEYPOINTS.LEFT_SHOULDER].x);
+    const bodyScale = Math.sqrt(bodyHeight * Math.max(0.05, scaleShoulderW));
+
+    // ─── VELOCITY per keypoint (normalized by body scale) ──
     const vel = (idx: number): number => {
       const p = prev[idx];
       const c = landmarks[idx];
       if (!p || !c) return 0;
       if ((c.visibility ?? 1) < 0.35) return 0;
-      return velocity(p, c);
+      return velocity(p, c, bodyScale);
     };
 
     const dirY = (idx: number): number => {
