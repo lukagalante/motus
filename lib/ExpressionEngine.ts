@@ -375,34 +375,30 @@ export class ExpressionEngine {
           harmonicity: 6, modulationIndex: 2,
           envelope: { attack: 0.01, decay: 0.6, sustain: 0.1, release: 0.8 },
         }, filterBase: 700 },
-        // RARM: BLADE RUNNER MAIN TITLE — CS-80 sawtooth swell
-        // MonoSynth sawtooth = the analog warmth of the CS-80
-        // Slow filter opening = the "crying" swell of the main title
-        // Bb3 = the key of the opening melody
-        { id: 'rarm', type: 'mono', midiNote: 58, options: { // Bb3
-          oscillator: { type: 'sawtooth' },
-          filterEnvelope: { attack: 0.5, decay: 1, sustain: 0.6, release: 1.2, baseFrequency: 80, octaves: 4.5 },
-          envelope: { attack: 0.4, decay: 1.2, sustain: 0.7, release: 1.5 },
-        }, filterBase: 200 },
-        // LARM: BLADE RUNNER MAIN TITLE — lower CS-80 pad layer
-        // Same sawtooth character, Eb3 minor third below
-        // Together = the full Vangelis CS-80 Blade Runner chord
-        { id: 'larm', type: 'mono', midiNote: 51, options: { // Eb3
-          oscillator: { type: 'sawtooth' },
-          filterEnvelope: { attack: 0.6, decay: 1.5, sustain: 0.5, release: 2, baseFrequency: 60, octaves: 4 },
-          envelope: { attack: 0.6, decay: 1.5, sustain: 0.7, release: 2 },
-        }, filterBase: 150 },
-        // TORSO: Korg Mono/Poly bass — fat analog, pulsing
-        { id: 'torso', type: 'mono', midiNote: 36, options: { // C2
+        // RARM: Korg Mono/Poly — fat analog, pulsing
+        { id: 'rarm', type: 'mono', midiNote: 36, options: { // C2
           oscillator: { type: 'sawtooth' },
           filterEnvelope: { attack: 0.015, decay: 0.4, sustain: 0.15, release: 0.3, baseFrequency: 120, octaves: 4 },
           envelope: { attack: 0.006, decay: 0.5, sustain: 0.2, release: 0.4 },
         }, filterBase: 120 },
-        // LEGS: MS-20 dark pulse — Carpenter horror, resonant
-        { id: 'legs', type: 'mono', midiNote: 43, options: { // G2
+        // LARM: MS-20 dark pulse — Carpenter horror, resonant
+        { id: 'larm', type: 'mono', midiNote: 43, options: { // G2
           oscillator: { type: 'sawtooth' },
           filterEnvelope: { attack: 0.001, decay: 0.2, sustain: 0.1, release: 0.15, baseFrequency: 150, octaves: 3 },
           envelope: { attack: 0.001, decay: 0.2, sustain: 0.1, release: 0.15 },
+        }, filterBase: 200 },
+        // TORSO: Korg Mono/Poly bass — sub foundation
+        { id: 'torso', type: 'mono', midiNote: 29, options: { // F1
+          oscillator: { type: 'sawtooth' },
+          filterEnvelope: { attack: 0.02, decay: 0.5, sustain: 0.2, release: 0.4, baseFrequency: 80, octaves: 3 },
+          envelope: { attack: 0.01, decay: 0.5, sustain: 0.2, release: 0.4 },
+        }, filterBase: 80 },
+        // LEGS: BLADE RUNNER MAIN TITLE — CS-80 sawtooth swell
+        // The main title crying swell on the legs
+        { id: 'legs', type: 'mono', midiNote: 58, options: { // Bb3
+          oscillator: { type: 'sawtooth' },
+          filterEnvelope: { attack: 0.5, decay: 1, sustain: 0.6, release: 1.2, baseFrequency: 80, octaves: 4.5 },
+          envelope: { attack: 0.4, decay: 1.2, sustain: 0.7, release: 1.5 },
         }, filterBase: 200 },
       ];
 
