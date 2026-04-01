@@ -375,22 +375,23 @@ export class ExpressionEngine {
           harmonicity: 6, modulationIndex: 2,
           envelope: { attack: 0.01, decay: 0.6, sustain: 0.1, release: 0.8 },
         }, filterBase: 700 },
-        // RARM: BLADE RUNNER MAIN TITLE — the CS-80 swell
-        // Slow attack that builds, filter opens with intensity,
-        // vibrato comes in after the swell. The sound that CRIES.
-        // Bb3 = the key of the main title melody
-        { id: 'rarm', type: 'fm', midiNote: 58, options: { // Bb3
-          harmonicity: 1.5, modulationIndex: 3,
-          envelope: { attack: 0.6, decay: 1.2, sustain: 0.7, release: 1.5 },
-        }, filterBase: 300 },
-        // LARM: BLADE RUNNER MAIN TITLE — harmonic complement
-        // The left arm plays the lower pad underneath the melody
-        // Together both arms recreate the full CS-80 layered sound
-        // Eb3 = minor third below, dark emotional foundation
-        { id: 'larm', type: 'fm', midiNote: 51, options: { // Eb3
-          harmonicity: 1.5, modulationIndex: 2,
-          envelope: { attack: 0.8, decay: 1.5, sustain: 0.7, release: 2 },
-        }, filterBase: 250 },
+        // RARM: BLADE RUNNER MAIN TITLE — CS-80 sawtooth swell
+        // MonoSynth sawtooth = the analog warmth of the CS-80
+        // Slow filter opening = the "crying" swell of the main title
+        // Bb3 = the key of the opening melody
+        { id: 'rarm', type: 'mono', midiNote: 58, options: { // Bb3
+          oscillator: { type: 'sawtooth' },
+          filterEnvelope: { attack: 0.5, decay: 1, sustain: 0.6, release: 1.2, baseFrequency: 80, octaves: 4.5 },
+          envelope: { attack: 0.4, decay: 1.2, sustain: 0.7, release: 1.5 },
+        }, filterBase: 200 },
+        // LARM: BLADE RUNNER MAIN TITLE — lower CS-80 pad layer
+        // Same sawtooth character, Eb3 minor third below
+        // Together = the full Vangelis CS-80 Blade Runner chord
+        { id: 'larm', type: 'mono', midiNote: 51, options: { // Eb3
+          oscillator: { type: 'sawtooth' },
+          filterEnvelope: { attack: 0.6, decay: 1.5, sustain: 0.5, release: 2, baseFrequency: 60, octaves: 4 },
+          envelope: { attack: 0.6, decay: 1.5, sustain: 0.7, release: 2 },
+        }, filterBase: 150 },
         // TORSO: Korg Mono/Poly bass — fat analog, pulsing
         { id: 'torso', type: 'mono', midiNote: 36, options: { // C2
           oscillator: { type: 'sawtooth' },
