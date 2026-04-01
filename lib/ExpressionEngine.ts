@@ -546,52 +546,51 @@ export class ExpressionEngine {
 
     const now = Tone.now();
 
+    // ─── PROXIMITY FACTOR ──────────────────────────
+    // Closer to camera = more harmonic detail, brighter filters
+    // Like moving closer to an instrument — more presence, not louder
+    const prox = state.proximity || 0;
+    const proxFilter = 1 + prox * 0.6;  // filters open 0-60% more when close
+    const proxMod = 1 + prox * 0.8;     // harmonics increase 0-80% when close
+
     // ─── HEAD VOICE ────────────────────────────────
     // Head spin slow→fast = rising pad sweep
     // Head nod = subtle pitch wobble
     // +24 semitones = 2 octaves range at max
     this.updateVoice('head', state.headFlow, {
       pitchBend: state.headFlow * 18 + Math.max(0, state.acceleration) * 6,
-      filterFreq: 200 + state.headFlow * 8000,
-      modBoost: Math.max(0, state.acceleration) * 8,
+      filterFreq: (200 + state.headFlow * 8000) * proxFilter,
+      modBoost: Math.max(0, state.acceleration) * 8 * proxMod,
     }, now);
 
     // ─── RIGHT ARM VOICE ───────────────────────────
-    // Melodic lead — hands height = pitch, flow = brightness
-    // Raised hand = high note, low hand = low note
-    // +14 semitones range
     this.updateVoice('rarm', state.rightArmFlow, {
       pitchBend: state.handsHeight * 10 + state.rightArmFlow * 4,
-      filterFreq: 300 + state.rightArmFlow * 10000,
-      modBoost: state.rightArmFlow * 5,
+      filterFreq: (300 + state.rightArmFlow * 10000) * proxFilter,
+      modBoost: state.rightArmFlow * 5 * proxMod,
     }, now);
 
     // ─── LEFT ARM VOICE ────────────────────────────
-    // Harmonic complement — follows right but offset
     this.updateVoice('larm', state.leftArmFlow, {
       pitchBend: state.handsHeight * 7 + state.leftArmFlow * 4,
-      filterFreq: 250 + state.leftArmFlow * 7000,
-      modBoost: state.leftArmFlow * 3,
+      filterFreq: (250 + state.leftArmFlow * 7000) * proxFilter,
+      modBoost: state.leftArmFlow * 3 * proxMod,
     }, now);
 
     // ─── TORSO VOICE ───────────────────────────────
-    // Foundation — lean shifts pitch, expansion opens sound
-    // ±5 semitones with lean, wider filter with expansion
     this.updateVoice('torso', state.torsoFlow, {
       pitchBend: state.lean * 5 + state.symmetry * 2,
-      filterFreq: 150 + state.bodyExpansion * 5000 + state.torsoFlow * 3000,
-      modBoost: state.torsoFlow * 4 + state.symmetry * 2,
+      filterFreq: (150 + state.bodyExpansion * 5000 + state.torsoFlow * 3000) * proxFilter,
+      modBoost: (state.torsoFlow * 4 + state.symmetry * 2) * proxMod,
     }, now);
 
     // ─── LEGS VOICE ────────────────────────────────
-    // Average both legs + asymmetry for footwork variation
-    // Asymmetric kicks (one leg) create filter/pitch modulation
     const legFlow = (state.rightLegFlow + state.leftLegFlow) / 2;
     const legAsymmetry = Math.abs(state.rightLegFlow - state.leftLegFlow);
     this.updateVoice('legs', legFlow, {
       pitchBend: Math.max(0, state.verticalEnergy) * 8 + legAsymmetry * 3,
-      filterFreq: 100 + legFlow * 4000 + legAsymmetry * 2000,
-      modBoost: Math.max(0, state.verticalEnergy) * 6 + legAsymmetry * 4,
+      filterFreq: (100 + legFlow * 4000 + legAsymmetry * 2000) * proxFilter,
+      modBoost: (Math.max(0, state.verticalEnergy) * 6 + legAsymmetry * 4) * proxMod,
     }, now);
   }
 

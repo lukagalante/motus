@@ -27,6 +27,8 @@ export interface BodyState {
   symmetry: number;
   /** Vertical energy — upward vs downward tendency */
   verticalEnergy: number;
+  /** Proximity — how close the body is to camera. 0 = far (full body), 1 = very close */
+  proximity: number;
 }
 
 export type TriggerCallback = (event: TriggerEvent) => void;
@@ -329,15 +331,19 @@ export class MovementEngine {
     ) / 5;
     const verticalEnergy = Math.max(-1, Math.min(1, bodyUpVel * 20));
 
-    // Still = truly frozen. Even breathing creates micro-movement.
-    // 0.01 is very strict — only camera jitter, no real body motion
     const isStill = globalActivity < 0.01;
+
+    // ─── PROXIMITY — how close is the body to camera ──
+    // bodyScale is bigger when closer to camera
+    // Normalize: 0.15 = far (full body), 0.5+ = very close
+    // Map to 0–1 range
+    const proximity = Math.min(1, Math.max(0, (bodyScale - 0.12) / 0.35));
 
     // ─── EMIT BODY STATE ───────────────────────────────
     this.onBodyState?.({
       globalActivity, rightArmFlow, leftArmFlow, rightLegFlow, leftLegFlow,
       torsoFlow, headFlow, handsHeight, bodyExpansion, lean, isStill,
-      acceleration, symmetry, verticalEnergy,
+      acceleration, symmetry, verticalEnergy, proximity,
     });
 
     // ─── PERCUSSIVE TRIGGERS ───────────────────────────

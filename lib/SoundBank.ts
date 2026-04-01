@@ -419,9 +419,11 @@ export class SoundBank {
       }, 1500);
     }
 
-    // ─── REVERB: body expansion ──────────────────
+    // ─── REVERB: expansion + proximity ─────────────
+    // Far away = more reverb (spacious), close = less reverb (intimate)
     if (!this.slowMoActive) {
-      const reverbWet = 0.1 + state.bodyExpansion * 0.6;
+      const prox = state.proximity || 0;
+      const reverbWet = (0.1 + state.bodyExpansion * 0.6) * (1 - prox * 0.4);
       this.reverb.wet.rampTo(reverbWet, 0.3);
     }
 
