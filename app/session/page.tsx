@@ -78,9 +78,13 @@ export default function SessionPage() {
       // Step 1: Unlock iOS audio + load Tone.js
       setLoadingMsg('Starting...');
       const { unlockIOSAudio } = await import('@/lib/iosAudio');
-      unlockIOSAudio(); // fire-and-forget, never blocks
+      unlockIOSAudio();
       ToneModule = await import('tone');
-      await ToneModule.start();
+      // Timeout Tone.start — never hang more than 3 seconds
+      await Promise.race([
+        ToneModule.start(),
+        new Promise(resolve => setTimeout(resolve, 3000)),
+      ]);
 
       // Step 2: Initialize all engines
       const { MoodEngine } = await import('@/lib/MoodEngine');

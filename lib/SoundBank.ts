@@ -217,8 +217,9 @@ export class SoundBank {
     this.initDrone();
     this.expressionEngine?.loadForPack(packIndex);
 
-    // Generate and load samples in background (upgrades sound quality)
-    this.loadSamplesForPack(packIndex);
+    // Sample loading disabled — synths provide instant sound
+    // To enable: uncomment the line below
+    // this.loadSamplesForPack(packIndex);
   }
 
   private async loadSamplesForPack(packIndex: number): Promise<void> {
