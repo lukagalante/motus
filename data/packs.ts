@@ -351,4 +351,31 @@ export const PACKS: SoundPackConfig[] = [
       { name: 'Hall Air', type: 'noise', duration: '1n', options: { noise: { type: 'brown' }, envelope: { attack: 0.5, decay: 1, sustain: 0.3, release: 1.5 } } },
     ],
   },
+  // ─────────────────────────────────────────────────────
+  // Pack 13 — JAZZ / Smoky Club
+  // Coltrane, Miles Davis, Bill Evans, Thelonious Monk
+  // Late night, saxophone breath, upright bass walk,
+  // brushed drums, Rhodes keys, smoky atmosphere
+  // ─────────────────────────────────────────────────────
+  {
+    name: 'Smoky Jazz',
+    slots: [
+      // Saxophone — breathy, warm, Coltrane tone. FM with formant for reed character
+      { name: 'Saxophone', type: 'fm', note: 'Bb3', duration: '2n', options: { harmonicity: 2, modulationIndex: 4, envelope: { attack: 0.06, decay: 0.8, sustain: 0.5, release: 0.8 } } },
+      // Brush snare — soft, sizzling, late night kit
+      { name: 'Brush', type: 'noise', duration: '4n', options: { noise: { type: 'brown' }, envelope: { attack: 0.015, decay: 0.25, sustain: 0.04, release: 0.18 } } },
+      // Ride cymbal — washy, dark, Kenny Clarke touch
+      { name: 'Dark Ride', type: 'noise', duration: '2n', options: { noise: { type: 'pink' }, envelope: { attack: 0.002, decay: 0.4, sustain: 0.06, release: 0.25 } } },
+      // Rhodes electric piano — warm, bell-like, Bill Evans voicings
+      { name: 'Rhodes', type: 'fm', note: 'Eb4', duration: '4n', options: { harmonicity: 3.5, modulationIndex: 0.8, envelope: { attack: 0.004, decay: 0.6, sustain: 0.15, release: 0.5 } } },
+      // Scat vocal — jazz vocal texture, Ella Fitzgerald
+      { name: 'Scat Vox', type: 'fm', note: 'G4', duration: '4n', options: { harmonicity: 2.5, modulationIndex: 5, envelope: { attack: 0.02, decay: 0.2, sustain: 0.12, release: 0.15 } } },
+      // Upright bass — walking bass line, deep warm pluck
+      { name: 'Upright', type: 'synth', note: 'E2', duration: '4n', options: { oscillator: { type: 'triangle' }, envelope: { attack: 0.004, decay: 0.35, sustain: 0.08, release: 0.25 } } },
+      // Muted trumpet — Miles Davis, harmon mute, intimate
+      { name: 'Mute Trpt', type: 'fm', note: 'D4', duration: '4n', options: { harmonicity: 3, modulationIndex: 2, envelope: { attack: 0.03, decay: 0.4, sustain: 0.3, release: 0.4 } } },
+      // Smoky room — atmosphere, vinyl warmth, distant chatter
+      { name: 'Smoke', type: 'noise', duration: '1n', options: { noise: { type: 'brown' }, envelope: { attack: 0.2, decay: 0.6, sustain: 0.2, release: 0.8 } } },
+    ],
+  },
 ];

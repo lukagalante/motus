@@ -1797,6 +1797,196 @@ function getOrchestraSounds(): PackSounds {
   };
 }
 
+function getJazzSounds(): PackSounds {
+  // ══════════════════════════════════════════════════════
+  // SMOKY JAZZ — Coltrane, Miles, Bill Evans, Monk
+  // Late night club, saxophone breath, walking bass,
+  // brushed drums, smoky atmosphere
+  // ══════════════════════════════════════════════════════
+  return {
+    // ── SAXOPHONE — breathy, warm, Coltrane tone ──────
+    // Saw through formant filters = reed character
+    // Vibrato for expression, breath noise layer
+    kick: { duration: 2.0, render: (ctx) => {
+      const f0 = 233; // Bb3
+      const o1 = createOsc(ctx, 'sawtooth', f0, 0, 2.0);
+      const o2 = createOsc(ctx, 'sawtooth', f0 * 1.002, 0, 2.0);
+      // Vibrato
+      const vib = createOsc(ctx, 'sine', 5, 0, 2.0);
+      const vibG = createGain(ctx, 0);
+      vibG.gain.setValueAtTime(0, 0);
+      vibG.gain.linearRampToValueAtTime(3, 0.3);
+      vib.connect(vibG).connect(o1.frequency);
+      const mix = createGain(ctx, 1);
+      const og1 = createGain(ctx, 0.22); o1.connect(og1).connect(mix);
+      const og2 = createGain(ctx, 0.16); o2.connect(og2).connect(mix);
+      // Reed formants — what makes sax sound like sax
+      const f1 = createFilter(ctx, 'bandpass', 450, 4); // body
+      const f2 = createFilter(ctx, 'bandpass', 1200, 3); // brightness
+      const f3 = createFilter(ctx, 'bandpass', 2800, 2); // edge
+      const f1g = createGain(ctx, 0.4);
+      const f2g = createGain(ctx, 0.25);
+      const f3g = createGain(ctx, 0.12);
+      const fmix = createGain(ctx, 1);
+      mix.connect(f1).connect(f1g).connect(fmix);
+      mix.connect(f2).connect(f2g).connect(fmix);
+      mix.connect(f3).connect(f3g).connect(fmix);
+      // Breath noise — the air through the reed
+      const breath = createNoise(ctx, 2.0);
+      const bg = createGain(ctx, 0);
+      envADSR(bg.gain, 0, 0.04, 0.5, 0.06, 0.6, 0.04);
+      const bbp = createFilter(ctx, 'bandpass', 2000, 1);
+      breath.connect(bbp).connect(bg).connect(fmix);
+      breath.start(0);
+      const master = createGain(ctx, 0);
+      envADSR(master.gain, 0, 0.05, 0.8, 0.45, 0.8, 0.4);
+      // Smoky room reverb
+      const delay = ctx.createDelay(1); delay.delayTime.value = 0.32;
+      const dfb = createGain(ctx, 0.18);
+      delay.connect(dfb).connect(createFilter(ctx, 'lowpass', 2000)).connect(delay);
+      const dm = createGain(ctx, 0.14);
+      delay.connect(dm).connect(ctx.destination);
+      fmix.connect(master).connect(ctx.destination);
+      fmix.connect(createGain(ctx, 0.12)).connect(delay);
+    }},
+    // ── BRUSH SNARE — soft, sizzling, late night ──────
+    snare: { duration: 0.4, render: (ctx) => {
+      const n = createBrownNoise(ctx, 0.4);
+      const g = createGain(ctx, 0);
+      envADSR(g.gain, 0, 0.012, 0.2, 0.04, 0.15, 0.35);
+      const lp = createFilter(ctx, 'lowpass', 3000);
+      const hp = createFilter(ctx, 'highpass', 200);
+      // Soft body thud
+      const body = createOsc(ctx, 'sine', 180, 0, 0.06);
+      const bodyG = createGain(ctx, 0.12);
+      envADSR(bodyG.gain, 0, 0.001, 0.03, 0, 0.02, 0.12);
+      n.connect(hp).connect(lp).connect(g).connect(ctx.destination);
+      body.connect(bodyG).connect(ctx.destination);
+      n.start(0);
+    }},
+    // ── DARK RIDE — washy, Kenny Clarke shimmer ───────
+    hat: { duration: 0.6, render: (ctx) => {
+      const n = createNoise(ctx, 0.6);
+      const g = createGain(ctx, 0);
+      envADSR(g.gain, 0, 0.002, 0.35, 0.06, 0.2, 0.2);
+      const bp = createFilter(ctx, 'bandpass', 4000, 0.6);
+      // Stick click
+      const click = createNoise(ctx, 0.004);
+      const cg = createGain(ctx, 0.15);
+      const chp = createFilter(ctx, 'highpass', 6000);
+      click.connect(chp).connect(cg).connect(ctx.destination);
+      click.start(0); click.stop(0.004);
+      n.connect(bp).connect(g).connect(ctx.destination);
+      n.start(0);
+    }},
+    // ── RHODES — warm bell, Bill Evans voicings ───────
+    perc: { duration: 1.5, render: (ctx) => {
+      const f0 = 311; // Eb4
+      // Rhodes = sine fundamental + bell harmonics
+      const partials = [
+        { freq: f0, gain: 0.4, decay: 1.0 },
+        { freq: f0 * 2, gain: 0.15, decay: 0.5 },
+        { freq: f0 * 3, gain: 0.06, decay: 0.25 },
+        { freq: f0 * 4.07, gain: 0.03, decay: 0.12 }, // inharmonic = bell
+      ];
+      partials.forEach(p => {
+        const osc = createOsc(ctx, 'sine', p.freq, 0, 1.5);
+        const g = createGain(ctx, 0);
+        envADSR(g.gain, 0, 0.003, p.decay, 0.02, p.decay * 0.6, p.gain);
+        osc.connect(g).connect(ctx.destination);
+      });
+      // Rhodes tine — the metallic attack
+      const tine = createOsc(ctx, 'triangle', f0 * 3, 0, 0.04);
+      const tg = createGain(ctx, 0.15);
+      envADSR(tg.gain, 0, 0.001, 0.02, 0, 0.01, 0.15);
+      tine.connect(tg).connect(ctx.destination);
+      // Warm room
+      const delay = ctx.createDelay(1); delay.delayTime.value = 0.28;
+      const dfb = createGain(ctx, 0.12);
+      delay.connect(dfb).connect(createFilter(ctx, 'lowpass', 1800)).connect(delay);
+      const dm = createGain(ctx, 0.1);
+      delay.connect(dm).connect(ctx.destination);
+      const dOsc = createOsc(ctx, 'sine', f0, 0, 1.2);
+      const dg = createGain(ctx, 0);
+      envADSR(dg.gain, 0, 0.003, 0.8, 0.01, 0.4, 0.06);
+      dOsc.connect(dg).connect(delay);
+    }},
+    // ── SCAT VOCAL — Ella Fitzgerald jazz vocal ───────
+    vocal: { duration: 0.5, render: (ctx) => {
+      const f0 = 392; // G4
+      const osc = createOsc(ctx, 'sawtooth', f0, 0, 0.5);
+      const g = createGain(ctx, 0);
+      envADSR(g.gain, 0, 0.015, 0.15, 0.1, 0.12, 0.35);
+      // "Da" formant
+      const f1 = createFilter(ctx, 'bandpass', 600, 5);
+      const f2 = createFilter(ctx, 'bandpass', 1800, 3);
+      const f1g = createGain(ctx, 0.4);
+      const f2g = createGain(ctx, 0.2);
+      const fmix = createGain(ctx, 1);
+      osc.connect(f1).connect(f1g).connect(fmix);
+      osc.connect(f2).connect(f2g).connect(fmix);
+      fmix.connect(g).connect(ctx.destination);
+    }},
+    // ── UPRIGHT BASS — walking line, deep warm pluck ──
+    bass: { duration: 0.6, render: (ctx) => {
+      const f0 = 82; // E2
+      const osc = createOsc(ctx, 'triangle', f0, 0, 0.6);
+      const h2 = createOsc(ctx, 'sine', f0 * 2, 0, 0.3);
+      const g = createGain(ctx, 0);
+      envADSR(g.gain, 0, 0.003, 0.3, 0.06, 0.2, 0.6);
+      const h2g = createGain(ctx, 0.12);
+      envADSR(h2g.gain, 0, 0.003, 0.12, 0, 0.08, 0.12);
+      // Body resonance
+      const bp = createFilter(ctx, 'bandpass', 250, 1);
+      osc.connect(bp).connect(g).connect(ctx.destination);
+      h2.connect(h2g).connect(ctx.destination);
+      // Finger noise
+      const finger = createNoise(ctx, 0.008);
+      const fg = createGain(ctx, 0.06);
+      finger.connect(createFilter(ctx, 'bandpass', 3000, 2)).connect(fg).connect(ctx.destination);
+      finger.start(0); finger.stop(0.008);
+    }},
+    // ── MUTED TRUMPET — Miles Davis, harmon mute ──────
+    melodic: { duration: 1.5, render: (ctx) => {
+      const f0 = 294; // D4
+      const o1 = createOsc(ctx, 'sawtooth', f0, 0, 1.5);
+      const o2 = createOsc(ctx, 'sawtooth', f0 * 1.001, 0, 1.5);
+      // Mute = narrow bandpass, nasal quality
+      const mute = createFilter(ctx, 'bandpass', 1500, 6);
+      const lp = createFilter(ctx, 'lowpass', 2500);
+      // Vibrato
+      const vib = createOsc(ctx, 'sine', 5, 0, 1.5);
+      const vibG = createGain(ctx, 0);
+      vibG.gain.setValueAtTime(0, 0);
+      vibG.gain.linearRampToValueAtTime(2.5, 0.4);
+      vib.connect(vibG).connect(o1.frequency);
+      const mix = createGain(ctx, 1);
+      const og1 = createGain(ctx, 0.2); o1.connect(og1).connect(mix);
+      const og2 = createGain(ctx, 0.15); o2.connect(og2).connect(mix);
+      const master = createGain(ctx, 0);
+      envADSR(master.gain, 0, 0.025, 0.6, 0.3, 0.6, 0.35);
+      mix.connect(mute).connect(lp).connect(master).connect(ctx.destination);
+      // Smoky delay
+      const delay = ctx.createDelay(1); delay.delayTime.value = 0.35;
+      const dfb = createGain(ctx, 0.15);
+      delay.connect(dfb).connect(createFilter(ctx, 'lowpass', 1500)).connect(delay);
+      const dm = createGain(ctx, 0.12);
+      delay.connect(dm).connect(ctx.destination);
+      lp.connect(createGain(ctx, 0.1)).connect(delay);
+    }},
+    // ── SMOKY ROOM — atmosphere, vinyl, distant talk ──
+    texture: { duration: 2.0, render: (ctx) => {
+      const n = createBrownNoise(ctx, 2.0);
+      const g = createGain(ctx, 0);
+      envADSR(g.gain, 0, 0.15, 0.6, 0.15, 0.8, 0.06);
+      const lp = createFilter(ctx, 'lowpass', 800);
+      const hp = createFilter(ctx, 'highpass', 100);
+      n.connect(hp).connect(lp).connect(g).connect(ctx.destination);
+      n.start(0);
+    }},
+  };
+}
+
 // ─── PACK REGISTRY ─────────────────────────────────
 
 const PACK_GENERATORS: Record<string, () => PackSounds> = {
@@ -1813,12 +2003,13 @@ const PACK_GENERATORS: Record<string, () => PackSounds> = {
   synthwave: getSynthwaveSounds,
   cinematic: getCinematicSounds,
   orchestra: getOrchestraSounds,
+  jazz: getJazzSounds,
 };
 
 const PACK_IDS = [
   'cypher', 'euphoria', 'ritual', 'melancholy', 'ascension',
   'feral', 'rage', 'void', 'classical', 'dnb', 'synthwave',
-  'cinematic', 'orchestra',
+  'cinematic', 'orchestra', 'jazz',
 ];
 
 // ─── RENDER + CACHE ────────────────────────────────

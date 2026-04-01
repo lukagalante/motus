@@ -396,7 +396,7 @@ export class SoundBank {
     // ─── DRONE ────────────────────────────────────
     if (flowLevel > 0.15 && !this.droneActive && this.droneSynth) {
       this.droneActive = true;
-      const droneNotes = ['C2', 'D2', 'E2', 'F2', 'G2', 'A2', 'Bb2', 'C2', 'D2', 'E2', 'A2', 'D2', 'G2'];
+      const droneNotes = ['C2', 'D2', 'E2', 'F2', 'G2', 'A2', 'Bb2', 'C2', 'D2', 'E2', 'A2', 'D2', 'G2', 'Bb1'];
       const note = droneNotes[this.currentPackIndex] || 'C2';
       try { this.droneSynth.triggerAttack(note, Tone.now()); } catch {}
     }

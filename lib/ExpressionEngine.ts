@@ -460,7 +460,36 @@ export class ExpressionEngine {
         }, filterBase: 350 },
       ];
 
-      // Fallback — generic if pack index is somehow out of range
+      // ── Pack 13 — JAZZ / Smoky Club ─────────────────────
+      case 13: return [
+        // HEAD: muted trumpet — Miles Davis, harmon mute, nasal FM
+        { id: 'head', type: 'fm', midiNote: 62, options: { // D4
+          harmonicity: 3, modulationIndex: 2,
+          envelope: { attack: 0.025, decay: 0.5, sustain: 0.3, release: 0.5 },
+        }, filterBase: 500 },
+        // RARM: saxophone — breathy reed, Coltrane tone
+        { id: 'rarm', type: 'fm', midiNote: 58, options: { // Bb3
+          harmonicity: 2, modulationIndex: 4,
+          envelope: { attack: 0.05, decay: 0.7, sustain: 0.45, release: 0.7 },
+        }, filterBase: 350 },
+        // LARM: Rhodes piano — warm bell, Bill Evans
+        { id: 'larm', type: 'fm', midiNote: 63, options: { // Eb4
+          harmonicity: 3.5, modulationIndex: 0.8,
+          envelope: { attack: 0.004, decay: 0.6, sustain: 0.12, release: 0.5 },
+        }, filterBase: 400 },
+        // TORSO: upright bass — walking line, triangle wave warm
+        { id: 'torso', type: 'synth', midiNote: 40, options: { // E2
+          oscillator: { type: 'triangle' },
+          envelope: { attack: 0.004, decay: 0.35, sustain: 0.08, release: 0.25 },
+        }, filterBase: 150 },
+        // LEGS: brush texture — soft, sizzling ride
+        { id: 'legs', type: 'fm', midiNote: 55, options: { // G3
+          harmonicity: 5, modulationIndex: 0.5,
+          envelope: { attack: 0.01, decay: 0.3, sustain: 0.08, release: 0.2 },
+        }, filterBase: 300 },
+      ];
+
+      // Fallback
       default: return [
         { id: 'head', type: 'fm', midiNote: 72, options: {
           harmonicity: 2, modulationIndex: 1.5,

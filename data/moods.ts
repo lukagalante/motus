@@ -11,7 +11,8 @@ export type MoodId =
   | 'dnb'
   | 'synthwave'
   | 'cinematic'
-  | 'orchestra';
+  | 'orchestra'
+  | 'jazz';
 
 export interface MoodConfig {
   id: MoodId;
@@ -225,6 +226,21 @@ export const MOODS: Record<MoodId, MoodConfig> = {
     defaultDelay: true,
     defaultQuantize: false,
   },
+  jazz: {
+    id: 'jazz',
+    name: 'JAZZ',
+    description: 'Smoky saxophone, late night, Coltrane soul',
+    accentColor: '#CA8A04',
+    skeletonColor: '#EAB308',
+    skeletonGlow: '0 0 20px #CA8A04, 0 0 40px #854D0E',
+    bgGradient: 'radial-gradient(ellipse at center, #1a1508 0%, #0a0a00 100%)',
+    padGlow: '#CA8A04',
+    defaultPackIndex: 13,
+    defaultBpm: 75,
+    defaultReverb: 55,
+    defaultDelay: true,
+    defaultQuantize: false,
+  },
 };
 
 export const MOOD_LIST: MoodId[] = [
@@ -241,4 +257,5 @@ export const MOOD_LIST: MoodId[] = [
   'synthwave',
   'cinematic',
   'orchestra',
+  'jazz',
 ];
