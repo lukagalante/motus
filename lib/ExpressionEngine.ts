@@ -375,28 +375,32 @@ export class ExpressionEngine {
           harmonicity: 6, modulationIndex: 2,
           envelope: { attack: 0.01, decay: 0.6, sustain: 0.1, release: 0.8 },
         }, filterBase: 700 },
-        // RARM: DX7 bell — quintessential 80s FM e-piano
-        { id: 'rarm', type: 'fm', midiNote: 69, options: { // A4
-          harmonicity: 3.5, modulationIndex: 1.2,
-          envelope: { attack: 0.003, decay: 0.5, sustain: 0.15, release: 0.4 },
-        }, filterBase: 600 },
-        // LARM: blade pad — Vangelis wide detuned AM
-        { id: 'larm', type: 'am', midiNote: 51, options: { // Eb3
-          harmonicity: 1.005,
-          envelope: { attack: 0.8, decay: 1, sustain: 0.7, release: 1.5 },
-        }, filterBase: 300 },
-        // TORSO: moog bass — deep analog mono sawtooth
+        // RARM: CS-80 BRASS — Vangelis signature, rich poly brass
+        // The right arm plays the heroic Blade Runner brass melody
+        // High harmonicity for brass timbre, slow attack for emotional swell
+        { id: 'rarm', type: 'fm', midiNote: 67, options: { // G4
+          harmonicity: 1.5, modulationIndex: 2.5,
+          envelope: { attack: 0.05, decay: 0.8, sustain: 0.5, release: 1 },
+        }, filterBase: 400 },
+        // LARM: TEARS IN RAIN PAD — the Vangelis emotional pad
+        // Slow attack, deep sustain, the melancholy beauty of Blade Runner
+        // AM with near-unison harmonicity = detuned chorus character
+        { id: 'larm', type: 'am', midiNote: 48, options: { // C3
+          harmonicity: 1.003,
+          envelope: { attack: 1, decay: 1.2, sustain: 0.8, release: 2 },
+        }, filterBase: 250 },
+        // TORSO: Korg Mono/Poly bass — fat analog, pulsing
         { id: 'torso', type: 'mono', midiNote: 36, options: { // C2
           oscillator: { type: 'sawtooth' },
-          filterEnvelope: { attack: 0.01, decay: 0.3, sustain: 0.2, release: 0.2, baseFrequency: 200, octaves: 3 },
-          envelope: { attack: 0.005, decay: 0.3, sustain: 0.2, release: 0.2 },
-        }, filterBase: 150 },
-        // LEGS: dark arp pulse — Stranger Things mono sequence
-        { id: 'legs', type: 'mono', midiNote: 46, options: { // Bb2
+          filterEnvelope: { attack: 0.015, decay: 0.4, sustain: 0.15, release: 0.3, baseFrequency: 120, octaves: 4 },
+          envelope: { attack: 0.006, decay: 0.5, sustain: 0.2, release: 0.4 },
+        }, filterBase: 120 },
+        // LEGS: MS-20 dark pulse — Carpenter horror, resonant
+        { id: 'legs', type: 'mono', midiNote: 43, options: { // G2
           oscillator: { type: 'sawtooth' },
-          filterEnvelope: { attack: 0.001, decay: 0.15, sustain: 0.08, release: 0.1, baseFrequency: 300, octaves: 2 },
-          envelope: { attack: 0.001, decay: 0.15, sustain: 0.08, release: 0.1 },
-        }, filterBase: 350 },
+          filterEnvelope: { attack: 0.001, decay: 0.2, sustain: 0.1, release: 0.15, baseFrequency: 150, octaves: 3 },
+          envelope: { attack: 0.001, decay: 0.2, sustain: 0.1, release: 0.15 },
+        }, filterBase: 200 },
       ];
 
       // ── Pack 11 — CINEMATIC / Zimmer ────────────────────
