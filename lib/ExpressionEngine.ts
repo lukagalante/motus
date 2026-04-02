@@ -685,15 +685,11 @@ export class ExpressionEngine {
     const now = Tone.now();
     this.voices.forEach((voice, id) => {
       if (voice.active) {
-        const smoothed = this.lerp(this.smoothGains.get(id) || 0, 0, 0.1);
-        this.smoothGains.set(id, smoothed);
-        voice.gain.gain.rampTo(smoothed, 0.15);
-
-        if (smoothed < 0.005) {
-          try { voice.synth.triggerRelease(now); } catch {}
-          voice.active = false;
-          this.smoothGains.set(id, 0);
-        }
+        // Fast kill — no lingering sound when still
+        voice.gain.gain.rampTo(0, 0.2);
+        try { voice.synth.triggerRelease(now + 0.2); } catch {}
+        voice.active = false;
+        this.smoothGains.set(id, 0);
       }
     });
   }

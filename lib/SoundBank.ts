@@ -361,27 +361,44 @@ export class SoundBank {
 
   updateBodyState(state: BodyState): void {
     // ─── SILENCE WHEN STILL ────────────────────────
+    // EVERYTHING stops — samples, synths, drone, expression
     if (state.isStill) {
+      // Stop drone
       if (this.droneActive) {
-        this.droneGain.gain.rampTo(0, 0.8);
+        this.droneGain.gain.rampTo(0, 0.5);
         setTimeout(() => {
           if (this.droneActive) {
             try { this.droneSynth?.triggerRelease(); } catch {}
             this.droneActive = false;
           }
-        }, 800);
+        }, 500);
       }
-      this.expressionFilter.frequency.rampTo(200, 0.5);
+
+      // Stop any playing samples
+      this.samplePlayers.forEach(p => {
+        if (p && p.state === 'started') {
+          try { p.stop('+0.3'); } catch {}
+        }
+      });
+
+      // Close filter = mute everything
+      this.expressionFilter.frequency.rampTo(50, 0.3);
+
+      // Fade master down slightly for clean silence
+      this.masterGain.gain.rampTo(0.1, 0.3);
+
       this.prevGlobalActivity = 0;
 
-      // Fade out slow-mo FX
       if (this.slowMoActive) {
-        this.delay.wet.rampTo(this._delayActive ? 0.18 : 0, 1);
-        this.reverb.wet.rampTo(0.3, 1);
+        this.delay.wet.rampTo(this._delayActive ? 0.18 : 0, 0.5);
+        this.reverb.wet.rampTo(0.12, 0.5);
         this.slowMoActive = false;
       }
       return;
     }
+
+    // Restore master gain when moving again
+    this.masterGain.gain.rampTo(0.8, 0.1);
 
     // ─── FILTER: activity opens spectrum ───────────
     const filterFreq = 200 + state.globalActivity * 11800;
