@@ -252,30 +252,30 @@ export class ExpressionEngine {
 
       // ── Pack 6 — RAGE / Industrial ──────────────────────
       case 6: return [
-        // HEAD: feedback screech — harsh high AM, NIN
-        { id: 'head', type: 'am', midiNote: 80, options: { // Ab5
-          harmonicity: 9,
-          envelope: { attack: 0.008, decay: 0.35, sustain: 0.5, release: 0.35 },
-        }, filterBase: 600 },
-        // RARM: metal clang — industrial pipe hit FM
-        { id: 'rarm', type: 'fm', midiNote: 57, options: { // A3
-          harmonicity: 11, modulationIndex: 35,
-          envelope: { attack: 0.001, decay: 0.3, sustain: 0.05, release: 0.2 },
+        // HEAD: Kanye vocal chop — Auto-Tune feel, pitched FM
+        { id: 'head', type: 'fm', midiNote: 60, options: { // C4
+          harmonicity: 2.5, modulationIndex: 3,
+          envelope: { attack: 0.01, decay: 0.25, sustain: 0.12, release: 0.2 },
         }, filterBase: 500 },
-        // LARM: noise burst — chaotic FM, circuit-bent
-        { id: 'larm', type: 'fm', midiNote: 77, options: { // F5
-          harmonicity: 13, modulationIndex: 55,
-          envelope: { attack: 0.001, decay: 0.08, sustain: 0.02, release: 0.04 },
-        }, filterBase: 400 },
-        // TORSO: distorted sub — crushed deep FM
-        { id: 'torso', type: 'fm', midiNote: 34, options: { // Bb1
-          harmonicity: 0.5, modulationIndex: 20,
-          envelope: { attack: 0.001, decay: 0.8, sustain: 0.3, release: 0.5 },
-        }, filterBase: 120 },
-        // LEGS: impact — massive body hit, mono punch
-        { id: 'legs', type: 'mono', midiNote: 38, options: { // D2
-          oscillator: { type: 'square' },
-          filterEnvelope: { attack: 0.001, decay: 0.4, sustain: 0, release: 0.3, baseFrequency: 100, octaves: 5 },
+        // RARM: Heartbreak synth — cold, emotional, minor pad
+        { id: 'rarm', type: 'fm', midiNote: 56, options: { // Ab3
+          harmonicity: 1.5, modulationIndex: 1.5,
+          envelope: { attack: 0.4, decay: 0.8, sustain: 0.5, release: 1 },
+        }, filterBase: 300 },
+        // LARM: Dark pad — Eb minor, 808s and Heartbreak cold
+        { id: 'larm', type: 'am', midiNote: 51, options: { // Eb3
+          harmonicity: 1.005,
+          envelope: { attack: 0.5, decay: 1, sustain: 0.6, release: 1.2 },
+        }, filterBase: 250 },
+        // TORSO: 808 sub bass — deep, long, chest-rattling
+        { id: 'torso', type: 'fm', midiNote: 36, options: { // C2
+          harmonicity: 0.5, modulationIndex: 2,
+          envelope: { attack: 0.001, decay: 1, sustain: 0.15, release: 0.6 },
+        }, filterBase: 100 },
+        // LEGS: 808 kick punch — hard, tight
+        { id: 'legs', type: 'mono', midiNote: 40, options: { // E2
+          oscillator: { type: 'sawtooth' },
+          filterEnvelope: { attack: 0.001, decay: 0.3, sustain: 0, release: 0.2, baseFrequency: 80, octaves: 4 },
           envelope: { attack: 0.001, decay: 0.5, sustain: 0, release: 0.3 },
         }, filterBase: 180 },
       ];

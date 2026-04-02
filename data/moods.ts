@@ -34,7 +34,7 @@ export const MOODS: Record<MoodId, MoodConfig> = {
   rage: {
     id: 'rage',
     name: 'RAGE',
-    description: 'Aggressive, primal, unfiltered',
+    description: 'Kanye 808s, heartbreak, dark heavy',
     accentColor: '#DC2626',
     skeletonColor: '#EF4444',
     skeletonGlow: '0 0 20px #DC2626, 0 0 40px #991B1B',

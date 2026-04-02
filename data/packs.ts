@@ -169,29 +169,30 @@ export const PACKS: SoundPackConfig[] = [
     ],
   },
   // ─────────────────────────────────────────────────────
-  // Pack 6 — RAGE / Industrial Noise
-  // Nine Inch Nails weight, Burial's dark garage undertow,
-  // Portishead distortion, Massive Attack's Mezzanine
+  // Pack 6 — RAGE / Kanye 808s & Heartbreak
+  // 808s and Heartbreak, Yeezus, MBDTF
+  // Deep 808 sub, hard claps, dark synth pads, vocal chops
+  // No arps. Just raw, emotional, heavy.
   // ─────────────────────────────────────────────────────
   {
-    name: 'Industrial Noise',
+    name: '808s & Rage',
     slots: [
-      // Distorted 808 — crushed, saturated sub, chest-caving
-      { name: 'Dist 808', type: 'membrane', note: 'Bb0', duration: '4n', options: { pitchDecay: 0.15, octaves: 12, envelope: { attack: 0.001, decay: 0.8, sustain: 0.05, release: 0.5 } } },
-      // Industrial snare — metal + noise layered, brutal
-      { name: 'Metal Snare', type: 'noise', duration: '16n', options: { noise: { type: 'white' }, envelope: { attack: 0.001, decay: 0.1, sustain: 0, release: 0.03 } } },
-      // Machine gun hat — rapid, mechanical, relentless
-      { name: 'Machine HH', type: 'metal', note: 'C6', duration: '64n', options: { frequency: 250, envelope: { attack: 0.001, decay: 0.02, release: 0.005 }, harmonicity: 6, modulationIndex: 45, resonance: 2000, octaves: 2 } },
-      // Metal clang — industrial pipe hit, factory floor
-      { name: 'Pipe Clang', type: 'metal', note: 'A3', duration: '4n', options: { frequency: 160, envelope: { attack: 0.001, decay: 0.45, release: 0.35 }, harmonicity: 11, modulationIndex: 55, resonance: 1800, octaves: 3.5 } },
-      // Scream vox — distorted vocal scream texture
-      { name: 'Scream Vox', type: 'fm', note: 'A4', duration: '4n', options: { harmonicity: 5, modulationIndex: 18, envelope: { attack: 0.005, decay: 0.2, sustain: 0.3, release: 0.2 } } },
-      // Glitch burst — digital destruction, circuit bent
-      { name: 'Glitch Burst', type: 'fm', note: 'F5', duration: '32n', options: { harmonicity: 13, modulationIndex: 55, envelope: { attack: 0.001, decay: 0.025, sustain: 0, release: 0.008 } } },
-      // Feedback drone — screeching, painful, alive
-      { name: 'Feedback', type: 'am', note: 'Ab4', duration: '4n', options: { harmonicity: 9, envelope: { attack: 0.008, decay: 0.35, sustain: 0.5, release: 0.35 } } },
-      // Concrete impact — massive body hit, cinematic violence
-      { name: 'Impact', type: 'membrane', note: 'D1', duration: '2n', options: { pitchDecay: 0.18, octaves: 9, envelope: { attack: 0.001, decay: 0.9, sustain: 0, release: 0.6 } } },
+      // 808 kick — THE Kanye sub, long tail, chest-rattling, C1
+      { name: '808 Sub', type: 'membrane', note: 'C1', duration: '1n', options: { pitchDecay: 0.06, octaves: 6, envelope: { attack: 0.001, decay: 1.2, sustain: 0.15, release: 0.8 } } },
+      // 808 snare/clap — hard layered clap, Yeezus aggression
+      { name: '808 Clap', type: 'noise', duration: '8n', options: { noise: { type: 'white' }, envelope: { attack: 0.001, decay: 0.15, sustain: 0.02, release: 0.08 } } },
+      // 808 hi-hat — crisp, tight, trap-influenced
+      { name: '808 Hat', type: 'metal', note: 'C6', duration: '32n', options: { frequency: 400, envelope: { attack: 0.001, decay: 0.04, release: 0.015 }, harmonicity: 5.1, modulationIndex: 32, resonance: 4000, octaves: 1.5 } },
+      // Dark synth pad — Heartbreak cold, emotional, minor key
+      { name: 'Dark Pad', type: 'am', note: 'Eb3', duration: '1n', options: { harmonicity: 1.005, envelope: { attack: 0.6, decay: 1, sustain: 0.6, release: 1.5 } } },
+      // Kanye vocal chop — pitched, processed, Auto-Tune feel
+      { name: 'Vox Chop', type: 'fm', note: 'C4', duration: '4n', options: { harmonicity: 2.5, modulationIndex: 3, envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.15 } } },
+      // 808 bass slide — pitch-bending sub, trap signature
+      { name: '808 Slide', type: 'membrane', note: 'G1', duration: '2n', options: { pitchDecay: 0.2, octaves: 4, envelope: { attack: 0.001, decay: 0.8, sustain: 0.1, release: 0.5 } } },
+      // Heartbreak synth — cold, lonely, minor, long sustain
+      { name: 'Heartbreak', type: 'fm', note: 'Ab3', duration: '1n', options: { harmonicity: 1.5, modulationIndex: 1.5, envelope: { attack: 0.5, decay: 1, sustain: 0.5, release: 1.2 } } },
+      // Impact/drop — MBDTF power, massive low hit
+      { name: 'Drop', type: 'membrane', note: 'E1', duration: '2n', options: { pitchDecay: 0.1, octaves: 8, envelope: { attack: 0.001, decay: 0.7, sustain: 0, release: 0.5 } } },
     ],
   },
   // ─────────────────────────────────────────────────────
