@@ -217,9 +217,45 @@ export class SoundBank {
     this.initDrone();
     this.expressionEngine?.loadForPack(packIndex);
 
-    // Sample loading disabled — synths provide instant sound
-    // To enable: uncomment the line below
-    // this.loadSamplesForPack(packIndex);
+    // Try loading real .wav samples from /samples/[packId]/
+    this.loadWavSamples(packIndex);
+  }
+
+  private async loadWavSamples(packIndex: number): Promise<void> {
+    const packId = getPackIdByIndex(packIndex);
+    const slotNames = ['kick', 'snare', 'hat', 'perc', 'vocal', 'bass', 'melodic', 'texture'];
+
+    for (let i = 0; i < slotNames.length; i++) {
+      const url = `/samples/${packId}/${slotNames[i]}.wav`;
+      try {
+        // Check if file exists with a HEAD request
+        const resp = await fetch(url, { method: 'HEAD' });
+        if (!resp.ok) continue;
+
+        // Load as Tone.Player
+        const player = new Tone.Player(url);
+        await Tone.loaded();
+
+        // Check we're still on same pack
+        if (this.currentPackIndex !== packIndex) {
+          player.dispose();
+          return;
+        }
+
+        if (this.synthGains[i]) {
+          player.connect(this.synthGains[i]);
+        }
+
+        this.samplePlayers[i] = player;
+      } catch {
+        // No sample file — synth fallback stays active
+      }
+    }
+
+    // Mark as loaded if at least one sample was found
+    if (this.samplePlayers.some(p => p !== null)) {
+      this.samplesLoaded = true;
+    }
   }
 
   private async loadSamplesForPack(packIndex: number): Promise<void> {
