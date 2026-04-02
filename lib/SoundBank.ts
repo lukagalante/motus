@@ -59,8 +59,8 @@ export class SoundBank {
 
   constructor() {
     this.masterGain = new Tone.Gain(0.8);
-    this.reverb = new Tone.Reverb({ decay: 2.5, wet: 0.3 });
-    this.delay = new Tone.FeedbackDelay({ delayTime: '8n', feedback: 0.3, wet: 0 });
+    this.reverb = new Tone.Reverb({ decay: 1.2, wet: 0.12 });
+    this.delay = new Tone.FeedbackDelay({ delayTime: '8n', feedback: 0.15, wet: 0 });
     this.expressionFilter = new Tone.Filter({ frequency: 8000, type: 'lowpass', rolloff: -12 });
     this.analyser = new Tone.Analyser('waveform', 256);
 
@@ -376,7 +376,7 @@ export class SoundBank {
 
       // Fade out slow-mo FX
       if (this.slowMoActive) {
-        this.delay.wet.rampTo(this._delayActive ? 0.4 : 0, 1);
+        this.delay.wet.rampTo(this._delayActive ? 0.18 : 0, 1);
         this.reverb.wet.rampTo(0.3, 1);
         this.slowMoActive = false;
       }
@@ -388,7 +388,7 @@ export class SoundBank {
     this.expressionFilter.frequency.rampTo(filterFreq, 0.1);
 
     // ─── SLOW-MOTION AUTO-FX ──────────────────────
-    // Detect slow, flowing movement: activity between 0.05–0.25
+    // Subtle — adds slight depth on slow movement, NOT a wall of echo
     const isSlow = state.globalActivity > 0.04 && state.globalActivity < 0.25;
     const flowLevel = Math.max(state.rightArmFlow, state.leftArmFlow, state.torsoFlow);
 
@@ -396,16 +396,15 @@ export class SoundBank {
       if (!this.slowMoActive) {
         this.slowMoActive = true;
       }
-      // Ramp delay and reverb up proportional to slowness
-      const intensity = 1 - (state.globalActivity / 0.25); // 1 = very slow, 0 = fast
-      this.delay.wet.rampTo(0.3 + intensity * 0.4, 0.3);
-      this.delay.feedback.rampTo(0.3 + intensity * 0.3, 0.3);
-      this.reverb.wet.rampTo(0.4 + intensity * 0.5, 0.3);
+      const intensity = 1 - (state.globalActivity / 0.25);
+      // Keep it subtle — max delay wet 0.2, max reverb wet 0.25
+      this.delay.wet.rampTo(0.08 + intensity * 0.12, 0.3);
+      this.delay.feedback.rampTo(0.1 + intensity * 0.1, 0.3);
+      this.reverb.wet.rampTo(0.12 + intensity * 0.13, 0.3);
     } else if (this.slowMoActive && state.globalActivity > 0.3) {
-      // Snap out of slow-mo when movement gets energetic
-      this.delay.wet.rampTo(this._delayActive ? 0.4 : 0, 0.5);
-      this.delay.feedback.rampTo(0.3, 0.3);
-      this.reverb.wet.rampTo(0.3, 0.5);
+      this.delay.wet.rampTo(this._delayActive ? 0.15 : 0, 0.5);
+      this.delay.feedback.rampTo(0.15, 0.3);
+      this.reverb.wet.rampTo(0.12, 0.5);
       this.slowMoActive = false;
     }
 
@@ -457,16 +456,17 @@ export class SoundBank {
     }
 
     // ─── REVERB: expansion + proximity ─────────────
-    // Far away = more reverb (spacious), close = less reverb (intimate)
+    // Subtle — max 0.25 reverb, never a wash
     if (!this.slowMoActive) {
       const prox = state.proximity || 0;
-      const reverbWet = (0.1 + state.bodyExpansion * 0.6) * (1 - prox * 0.4);
+      const reverbWet = (0.08 + state.bodyExpansion * 0.17) * (1 - prox * 0.3);
       this.reverb.wet.rampTo(reverbWet, 0.3);
     }
 
     // ─── DELAY: lean ─────────────────────────────
+    // Subtle feedback — max 0.25, never runaway echo
     if (this._delayActive && !this.slowMoActive) {
-      const fb = 0.15 + Math.abs(state.lean) * 0.35;
+      const fb = 0.1 + Math.abs(state.lean) * 0.15;
       this.delay.feedback.rampTo(fb, 0.2);
     }
 
@@ -497,7 +497,7 @@ export class SoundBank {
 
   setDelay(active: boolean): void {
     this._delayActive = active;
-    this.delay.wet.rampTo(active ? 0.4 : 0, 0.1);
+    this.delay.wet.rampTo(active ? 0.18 : 0, 0.1);
   }
 
   get delayActive(): boolean { return this._delayActive; }
