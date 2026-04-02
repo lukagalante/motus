@@ -107,19 +107,27 @@ class EMA {
 // 0.002 catches micro-movements, 0.005 ignores them.
 const NOISE_FLOOR = 0.002;
 
-// Percussive trigger thresholds — lower = triggers on smaller movements
+// Percussive trigger thresholds — need real intentional movement
 const PERCUSSIVE_THRESHOLDS = {
-  wrist: 0.012,   // hands — most sensitive, dancers use hands a lot
-  hip: 0.007,     // hip sway — subtle groove detection
-  nose: 0.008,    // head nod — catches subtle nods
-  jump: 0.012,    // full body up — medium threshold
-  kick: 0.006,    // knee raise — catches footwork
+  wrist: 0.02,    // hands — needs clear gesture, not just drift
+  hip: 0.015,     // hip sway — intentional groove, not standing still
+  nose: 0.018,    // head nod — clear nod, not camera shake
+  jump: 0.02,     // full body up — real jump
+  kick: 0.012,    // knee raise — real kick
 };
 
-// Cooldown between same-slot triggers (ms)
-// 100ms = very responsive, can trigger 10x/sec
-// 200ms = more musical, max 5x/sec
-const COOLDOWN_MS = 100;
+// Per-slot cooldowns (ms) — percussive sounds need longer gaps
+const SLOT_COOLDOWNS: Record<string, number> = {
+  right_hand: 180,   // melodic — medium
+  left_hand: 180,    // texture — medium
+  right_kick: 250,   // hat — can be faster
+  left_kick: 250,    // perc — medium
+  air: 350,          // vocal — needs space to breathe
+  bass: 300,         // bass — long tail, needs gap
+  snare: 280,        // snare/clap — don't machine gun
+  crash: 400,        // crash/drop — rare, big impact
+};
+const DEFAULT_COOLDOWN = 200;
 
 // ─── MOVEMENT ENGINE ───────────────────────────────────
 
@@ -427,7 +435,8 @@ export class MovementEngine {
 
   private fireTrigger(slot: SoundSlot, intensity: number, direction?: TriggerEvent['direction']): void {
     const last = this.cooldowns.get(slot) || 0;
-    if (performance.now() - last < COOLDOWN_MS) return;
+    const cooldown = SLOT_COOLDOWNS[slot] || DEFAULT_COOLDOWN;
+    if (performance.now() - last < cooldown) return;
     this.cooldowns.set(slot, performance.now());
     this.onTrigger?.({ slot, velocity: Math.max(0.1, Math.min(1, intensity)), direction });
   }
